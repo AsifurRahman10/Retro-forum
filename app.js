@@ -1,9 +1,16 @@
 // data fetch
 // all post
-const getAllData = () => {
-  fetch('https://openapi.programming-hero.com/api/retro-forum/posts')
-    .then(res => res.json())
-    .then(data => showAllPost(data.posts))
+const getAllData = (category) => {
+  if (category) {
+    fetch(`https://openapi.programming-hero.com/api/retro-forum/posts/?category=${category}`)
+      .then(res => res.json())
+      .then(data => showAllPost(data.posts))
+  }
+  else {
+    fetch('https://openapi.programming-hero.com/api/retro-forum/posts')
+      .then(res => res.json())
+      .then(data => showAllPost(data.posts))
+  }
 }
 // latest post
 const getLatestPostData = () => {
@@ -55,8 +62,10 @@ const displayLatestPost = (data) => {
 
 
 const showAllPost = (allData) => {
+  const postContainer = document.getElementById('post-container');
+  postContainer.innerHTML = '';
   allData.forEach(post => {
-    const postContainer = document.getElementById('post-container');
+    // const postContainer = document.getElementById('post-container');
     const div = document.createElement('div');
     div.innerHTML =
       `
@@ -140,6 +149,12 @@ const makeAsRead = (des, view) => {
   count++;
   markAsReadCount.innerHTML = count;
 }
+
+// search by category
+document.getElementById('searchPostsBtn').addEventListener('click', () => {
+  const searchItem = document.getElementById('searchPosts').value;
+  getAllData(searchItem);
+})
 
 
 

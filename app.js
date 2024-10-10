@@ -1,9 +1,58 @@
 // data fetch
+// all post
 const getAllData = () => {
   fetch('https://openapi.programming-hero.com/api/retro-forum/posts')
     .then(res => res.json())
     .then(data => showAllPost(data.posts))
 }
+// latest post
+const getLatestPostData = () => {
+  fetch('https://openapi.programming-hero.com/api/retro-forum/latest-posts')
+    .then(res => res.json())
+    .then(data => displayLatestPost(data))
+}
+
+// display latest post
+const displayLatestPost = (data) => {
+  data.forEach(post => {
+    const latestContainer = document.getElementById('latest-container');
+    const div = document.createElement('div');
+    div.classList = "card p-8 shadow-xl space-y-4"
+    div.innerHTML = `
+     <figure>
+              <img
+                class="p-0 rounded-lg"
+                src="${(post.cover_image) ? post.cover_image : "N/A"}"
+                alt="Shoes"
+              />
+            </figure>
+            <div class="card-body p-0">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-calendar-days"></i>
+                <p class="text-slate-400">${(post.author?.posted_date) ? post.author?.posted_date : "N/A"}</p>
+              </div>
+              <h2 class="font-bold text-xl">
+              ${(post.title) ? post.title : "N/A"}
+              </h2>
+              <p class="text-slate-400">
+              ${(post.description) ? post.description : "N/A"}
+              </p>
+              <div class="flex items-center gap-2">
+                <div>
+                  <img class="w-10 h-10 rounded-full" src=" ${(post.profile_image) ? post.profile_image : "N/A"}" alt="" />
+                </div>
+                <div>
+                  <h2 class="font-bold">${(post.author.name) ? post.author.name : "N/A"}</h2>
+                  <p class="text-slate-400">${(post.author.designation) ? post.author.designation : "N/A"}</p>
+                </div>
+              </div>
+            </div>
+    
+    `
+    latestContainer.appendChild(div);
+  });
+}
+
 
 const showAllPost = (allData) => {
   allData.forEach(post => {
@@ -92,4 +141,7 @@ const makeAsRead = (des, view) => {
   markAsReadCount.innerHTML = count;
 }
 
+
+
 getAllData();
+getLatestPostData();
